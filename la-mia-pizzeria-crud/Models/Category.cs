@@ -1,10 +1,12 @@
 ﻿using System.ComponentModel.DataAnnotations;
+using System.Text.Json.Serialization;
 
 namespace la_mia_pizzeria_static.Models
 
 {
     public class Category
     {
+        [JsonIgnore]
         public int Id { get; set; }
 
         [Required(ErrorMessage = "Il nome della categoria è obbligatorio")]
