@@ -1,0 +1,33 @@
+﻿.pizza{
+
+    max-width:150px;
+    max-height:150px;
+    aspect-ratio:1;
+}
+
+a{
+    color: currentColor;
+    text-decoration:none !important
+}
+
+.pizzaNotFound {
+    height: 80vh;
+    background-image: url(../img/scatola.png);
+    background-size: contain;
+    background-repeat: no-repeat;
+    background-position: center;
+    margin: auto;
+    padding-top:20%;
+    padding-bottom:20%;
+}
+
+.errorMessage {
+    display: inline-block;
+    text-align:center;
+    transform: translate(50%);
+    font-size: 48px;
+    font-weight:900;
+    width: 50%;
+    color:darkred;
+    border-shadow: 1px solid red;
+}
