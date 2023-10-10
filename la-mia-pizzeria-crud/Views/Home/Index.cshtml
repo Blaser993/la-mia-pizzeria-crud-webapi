@@ -1,8 +1,162 @@
 ﻿@{
     Layout = "_Layout";
-    ViewData["Title"] = "Home Page";
 }
 
 
 
-<h1>Le Pizze</h1>
+<div class="container">
+
+
+    <div class="row">
+        <div class="col-12">
+            <h1>lista delle Pizze</h1>
+            <div>
+                <input id="js_search_box" type="text" class="form-control my-3" placeholder="Cerca per nome...">
+            </div>
+        </div>
+    </div>
+
+    <div id="loading-spinner" class="row">
+        <div class="col-12">
+            <div class="spinner-border" role="status">
+            </div>
+            <span>Sto cercando le pizze disponibili...</span>
+        </div>
+    </div>
+
+  
+    <div id="row-no-pizze" class="row d-none">
+        <div class="col-12">
+            Nessun articolo trovato!
+        </div>
+    </div>
+
+    <div id="list-of-pizze" class="row d-none">
+
+    </div>
+
+</div>
+
+
+@section Scripts {
+
+    <script type="text/javascript">
+
+        getAllPizze();
+
+
+
+        document.getElementById("js_search_box").addEventListener('keyup', searchPizze);
+
+
+
+
+        function searchPizze() {
+            let searchString = document.getElementById("js_search_box").value;
+
+            loadPizze(searchString);
+        }
+
+        function getAllPizze() {
+
+            axios.get('/api/Pizze/GetPizze', {
+
+            }).then((res) => {
+
+                console.log(res);
+
+                let divNoPizze = document.getElementById("div-no-pizze");
+                let loadingSpinnerElement = document.getElementById("loading-spinner");
+                let listOfPizzeElement = document.getElementById("list-of-pizze");
+
+                if (res.data.length == 0) {
+
+                    divNoPizze.classList.remove("d-none");
+                    loadingSpinnerElement.classList.add("d-none");
+
+                } else {
+                    loadingSpinnerElement.classList.add("d-none");
+                    listOfPizzeElement.classList.remove("d-none");
+
+                    listOfPizzeElement.innerHTML = "";
+
+                    res.data.forEach(pizza => {
+                        console.log(pizza);
+
+                        listOfPizzeElement.innerHTML +=
+                            `
+                                            <div class="col-12 col-md-4 p-2">
+
+                                                <div class="card post h-100">
+                                                    <img src="${pizza.image}" class="card-img-top" alt="Immagine ${pizza.name}">
+                                                    <div class="card-body">
+                                                        <h5 class="card-title">${pizza.name}</h5>
+                                                        <p class="card-text">${pizza.description}</p>
+                                                        <span> ${pizza.prize} €</span>
+                                                    </div>
+                                                </div>
+
+                                            </div>
+                                            `
+
+                    });
+                }
+
+            })
+
+        }
+
+        function loadPizze(searchParam) {
+
+
+            axios.get('/api/Pizze/SearchPizze', {
+                params: {
+                    search: searchParam
+                }
+            }).then((res) => {
+
+                console.log(res);
+
+                let divNoPizze = document.getElementById("div-no-pizze");
+                let loadingSpinnerElement = document.getElementById("loading-spinner");
+                let listOfPizzeElement = document.getElementById("list-of-pizze");
+
+                if (res.data.length == 0) {
+
+                    divNoPizze.classList.remove("d-none");
+                    loadingSpinnerElement.classList.add("d-none");
+
+                } else {
+                    loadingSpinnerElement.classList.add("d-none");
+                    listOfPizzeElement.classList.remove("d-none");
+
+                    listOfPizzeElement.innerHTML = "";
+
+                    res.data.forEach(pizza => {
+                        console.log(pizza);
+
+                        listOfPizzeElement.innerHTML +=
+                            `
+                                    <div class="col-12 col-md-4 p-2">
+
+                                        <div class="card post h-100">
+                                            <img src="${pizza.image}" class="card-img-top" alt="Immagine ${pizza.name}">
+                                            <div class="card-body">
+                                                <h5 class="card-title">${pizza.name}</h5>
+                                                <p class="card-text">${pizza.description}</p>
+                                                <span>${pizza.prize} €</span>
+                                            </div>
+                                        </div>
+
+                                    </div>
+                                    `
+
+                    });
+                }
+
+            })
+        }
+
+    </script>
+
+}
